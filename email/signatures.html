@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Email Signatures — Luke Veysie</title>
+<style>
+  @font-face { font-family:'Donrich'; src:url('Donrich.otf') format('opentype'); font-weight:400; font-style:normal; font-display:swap; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:#F7F7F7; color:#0A0908; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; -webkit-font-smoothing:antialiased; }
+  a { color:inherit; }
+  .wrap { max-width:880px; margin:0 auto; padding:clamp(28px,6vw,72px) clamp(18px,5vw,56px) 110px; position:relative; }
+  .blob { position:absolute; right:-7%; top:-9%; width:min(44vw,460px); opacity:.10; transform:rotate(8deg); pointer-events:none; }
+  .kick { font-weight:700; font-size:12px; letter-spacing:.16em; text-transform:uppercase; color:#0F33CC; }
+  h1 { font-family:'Donrich','Helvetica Neue',sans-serif; font-weight:400; font-size:clamp(42px,8vw,92px); line-height:.92; letter-spacing:.005em; text-transform:uppercase; margin:16px 0 0; }
+  .lead { font-size:15.5px; line-height:1.6; color:#4A4845; max-width:56ch; margin:20px 0 0; }
+  .num { font-family:'Donrich','Helvetica Neue',sans-serif; font-size:26px; line-height:.8; color:#0F33CC; }
+  .lbl { font-family:'Donrich','Helvetica Neue',sans-serif; font-size:24px; line-height:.8; text-transform:uppercase; letter-spacing:.01em; }
+  .meta { font-weight:700; font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:#908C87; margin-left:auto; }
+  .row { display:flex; align-items:center; gap:14px; margin-bottom:16px; }
+  .card { background:#fff; border:1.5px solid #0A0908; border-radius:18px; padding:34px 38px; box-shadow:6px 6px 0 #0A0908; }
+  .btns { display:flex; gap:10px; margin-top:16px; flex-wrap:wrap; }
+  button { font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-weight:700; font-size:12px; letter-spacing:.1em; text-transform:uppercase; border-radius:999px; padding:12px 22px; cursor:pointer; border:1.5px solid #0A0908; transition:background .15s, color .15s; }
+  .primary { color:#F7F7F7; background:#0F33CC; box-shadow:3px 3px 0 #0A0908; }
+  .primary:hover { background:#0C2BB0; }
+  .ghost { color:#0A0908; background:transparent; }
+  .ghost:hover { background:#0A0908; color:#F7F7F7; }
+  .assets { margin-top:34px; background:#fff; border:1.5px solid #0A0908; border-radius:18px; box-shadow:6px 6px 0 #0A0908; overflow:hidden; }
+  .ahead { font-weight:700; font-size:11px; letter-spacing:.16em; text-transform:uppercase; padding:18px 22px 0; }
+  .asset { display:flex; align-items:center; gap:16px; padding:16px 22px; border-top:1.5px solid #E9E7E4; }
+  .asset:first-of-type { border-top:none; }
+  .asset .thumb { width:62px; height:46px; flex:0 0 auto; display:flex; align-items:center; justify-content:center; background:#F0F0EF; border-radius:8px; overflow:hidden; }
+  .asset .thumb.dark { background:#0F33CC; }
+  .asset .thumb img { max-width:84%; max-height:78%; display:block; }
+  .asset .info { min-width:0; flex:1; }
+  .asset .fname { font-weight:700; font-size:13.5px; }
+  .asset .url { font-size:11.5px; color:#6B6864; word-break:break-all; margin-top:3px; font-family:ui-monospace,Menlo,monospace; }
+  .asset .copy { flex:0 0 auto; font-size:10px; padding:9px 14px; }
+  .guide { margin-top:50px; background:#fff; border:1.5px solid #0A0908; border-radius:18px; padding:28px 34px; box-shadow:6px 6px 0 #0A0908; }
+  .guide-head { font-weight:700; font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:#0F33CC; margin-bottom:18px; }
+  .guide-steps { margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:12px; }
+  .guide-steps li { display:flex; align-items:flex-start; gap:14px; font-size:14px; line-height:1.5; color:#1C1B1A; }
+  .step-n { flex:0 0 auto; display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:50%; background:#0F33CC; color:#fff; font-weight:700; font-size:11px; margin-top:1px; }
+  .foot { margin-top:44px; border-top:2.5px solid #0A0908; padding-top:18px; font-weight:600; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:#908C87; line-height:1.8; }
+  .hosted { display:inline-block; margin-top:10px; font-weight:700; font-size:11px; letter-spacing:.08em; text-transform:uppercase; padding:7px 13px; border-radius:999px; }
+  .hosted.ok { background:#E4F5EA; color:#1F6B43; }
+  .hosted.no { background:#FBEAE7; color:#9A2A1B; }
+  section.opt { margin-top:54px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <img class="blob" src="blob.png" alt="" aria-hidden="true">
+
+  <div class="kick">Email Signatures · Internal Page</div>
+  <h1>Sign here<span style="color:#0F33CC;">.</span></h1>
+  <p class="lead">An unlisted page on your own site. Because the marks are served from this domain, the signatures below copy with <b>real hosted images</b> — they load in Gmail, Apple Mail and Outlook alike. Pick one, hit <b>Select for Apple Mail</b>, press <b>⌘C</b>, and paste into Mail's signature settings.</p>
+  <div id="hosted" class="hosted no">Checking image host…</div>
+
+  <!-- Asset URLs -->
+  <div class="assets">
+    <div class="ahead">Hosted assets — direct URLs</div>
+    <div class="asset"><div class="thumb"><img src="wordmark-ink.png" alt=""></div><div class="info"><div class="fname">wordmark-ink.png</div><div class="url" data-file="wordmark-ink.png"></div></div><button class="ghost copy" data-url="wordmark-ink.png">Copy URL</button></div>
+    <div class="asset"><div class="thumb dark"><img src="wordmark-reverse.png" alt=""></div><div class="info"><div class="fname">wordmark-reverse.png</div><div class="url" data-file="wordmark-reverse.png"></div></div><button class="ghost copy" data-url="wordmark-reverse.png">Copy URL</button></div>
+    <div class="asset"><div class="thumb dark"><img src="badge.png" alt=""></div><div class="info"><div class="fname">badge.png</div><div class="url" data-file="badge.png"></div></div><button class="ghost copy" data-url="badge.png">Copy URL</button></div>
+    <div class="asset"><div class="thumb"><img src="blob.png" alt=""></div><div class="info"><div class="fname">blob.png</div><div class="url" data-file="blob.png"></div></div><button class="ghost copy" data-url="blob.png">Copy URL</button></div>
+  </div>
+
+  <div id="options"></div>
+
+  <div class="guide">
+    <div class="guide-head">How to install in Apple Mail</div>
+    <ol class="guide-steps">
+      <li><span class="step-n">1</span>Click <b>Select for Apple Mail</b> on any signature below — it highlights the rendered signature.</li>
+      <li><span class="step-n">2</span>Press <b>⌘ C</b> to copy it.</li>
+      <li><span class="step-n">3</span>Open <b>Mail → Settings → Signatures</b>. Pick an account, click <b>+</b> to create a new signature.</li>
+      <li><span class="step-n">4</span>Click inside the right-hand preview panel, select all placeholder text, then press <b>⌘ V</b> to paste.</li>
+      <li><span class="step-n">5</span>Done — the logo and formatting will appear. Set it as default for your account.</li>
+    </ol>
+  </div>
+
+  <div class="foot">
+    <b>Select for Apple Mail</b> highlights the rendered signature — press ⌘C then paste directly into Mail's signature editor.<br>
+    <b>Copy code</b> gives the raw HTML for any editor that accepts source.
+  </div>
+</div>
+
+<script>
+(function () {
+  // ---- Your details (edit here) ----
+  var ME = {
+    role: 'Director / Editor',
+    place: '',
+    email: 'hello@lukeveysie.com',
+    phone: '+27 79 863 2017',
+    website: 'lukeveysie.com',
+    instagram: 'luke_veysie'
+  };
+
+  // Absolute base URL of THIS folder, derived from where the page is served.
+  var BASE = new URL('.', location.href).href; // ends with '/'
+  var isHosted = /^https?:$/.test(location.protocol);
+  function asset(name) { return BASE + name; }
+
+  // ---- shared bits ----
+  var BLUE = '#0F33CC', INK = '#0A0908', BODY = '#1C1B1A', FAINT = '#B8B4AF', PAPER = '#F7F7F7';
+  var tel = ME.phone.replace(/[^0-9+]/g, '');
+  var web = ME.website.replace(/^https?:\/\//, '');
+  var webUrl = 'https://' + web;
+  var ig = ME.instagram.replace(/^@/, '');
+  var igUrl = 'https://instagram.com/' + ig, igText = '@' + ig;
+  var roleLine = ME.place ? ME.role + ' · ' + ME.place : ME.role;
+  var helv = "font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:700;";
+  var dotI = '<span style="color:' + FAINT + ';">&nbsp;&nbsp;·&nbsp;&nbsp;</span>';
+  var dotR = '<span style="color:rgba(247,247,247,.5);">&nbsp;&nbsp;·&nbsp;&nbsp;</span>';
+  var onBlueDim = 'rgba(247,247,247,.78)';
+  function a(href, txt, col) { return '<a href="' + href + '" style="' + helv + 'color:' + col + ';text-decoration:none;">' + txt + '</a>'; }
+  function img(file, w, h) { return '<img src="' + asset(file) + '" width="' + w + '" height="' + h + '" alt="Luke Veysie" style="display:block;border:0;width:' + w + 'px;height:' + h + 'px;">'; }
+
+  // ---- the four signatures ----
+  function sigBadge() {
+    return '<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;"><tr>'
+      + '<td style="vertical-align:middle;padding:0 22px 0 0;">' + img('badge.png', 82, 82) + '</td>'
+      + '<td style="vertical-align:middle;border-left:2px solid ' + INK + ';padding:2px 0 2px 22px;">'
+      + '<div style="' + helv + 'font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:' + BLUE + ';">' + roleLine + '</div>'
+      + '<div style="' + helv + 'font-size:13px;line-height:1.85;color:' + BODY + ';padding-top:9px;">'
+      + a('mailto:' + ME.email, ME.email, INK) + '<br>'
+      + a('tel:' + tel, ME.phone, INK) + '<br>'
+      + a(webUrl, web, BLUE) + dotI + a(igUrl, igText, BLUE)
+      + '</div></td></tr></table>';
+  }
+  function sigLockup() {
+    return '<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;"><tr><td style="padding:0;">'
+      + img('wordmark-ink.png', 208, 52)
+      + '<div style="border-top:2.5px solid ' + INK + ';margin:16px 0 0;padding-top:13px;">'
+      + '<div style="' + helv + 'font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:' + BLUE + ';">' + roleLine + '</div>'
+      + '<div style="' + helv + 'font-size:13px;line-height:1.85;color:' + BODY + ';padding-top:8px;">'
+      + a('mailto:' + ME.email, ME.email, INK) + dotI + a('tel:' + tel, ME.phone, INK) + '<br>'
+      + a(webUrl, web, BLUE) + dotI + a(igUrl, igText, BLUE)
+      + '</div></div></td></tr></table>';
+  }
+  function sigLoud() {
+    return '<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;"><tr><td style="background:' + BLUE + ';border-radius:16px;padding:26px 30px;">'
+      + img('wordmark-reverse.png', 190, 48)
+      + '<div style="' + helv + 'font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:' + onBlueDim + ';padding-top:15px;">' + roleLine + '</div>'
+      + '<div style="' + helv + 'font-size:13px;line-height:1.85;color:' + PAPER + ';padding-top:9px;">'
+      + a('mailto:' + ME.email, ME.email, PAPER) + dotR + a('tel:' + tel, ME.phone, PAPER) + '<br>'
+      + a(webUrl, web, PAPER) + dotR + a(igUrl, igText, PAPER)
+      + '</div></td></tr></table>';
+  }
+  function sigSignoff() {
+    return '<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;"><tr><td style="padding:0;">'
+      + '<div style="' + helv + 'font-size:15px;color:' + BODY + ';padding-bottom:14px;">Many thanks,</div>'
+      + img('wordmark-ink.png', 190, 48)
+      + '<div style="border-top:2.5px solid ' + INK + ';margin-top:15px;padding-top:12px;">'
+      + '<div style="' + helv + 'font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:' + BLUE + ';">' + roleLine + '</div>'
+      + '<div style="' + helv + 'font-size:12.5px;line-height:1.8;color:' + BLUE + ';padding-top:7px;">'
+      + a('mailto:' + ME.email, ME.email, BLUE) + dotI + a('tel:' + tel, ME.phone, BLUE) + dotI + a(webUrl, web, BLUE) + dotI + a(igUrl, igText, BLUE)
+      + '</div></div></td></tr></table>';
+  }
+
+  var OPTIONS = [
+    { n: '01', label: 'Badge', meta: 'mark + contacts', build: sigBadge },
+    { n: '02', label: 'Lockup', meta: 'wordmark + ink rule', build: sigLockup },
+    { n: '03', label: 'Loud', meta: 'ultramarine card', build: sigLoud },
+    { n: '04', label: 'Sign-off', meta: '"many thanks," · ready to send', build: sigSignoff }
+  ];
+
+  var plain = 'Many thanks,\nLuke Veysie — ' + roleLine + '\n' + ME.email + ' · ' + ME.phone + '\n' + web + ' · ' + igText;
+
+  // ---- select card for Apple Mail ----
+  function selectCard(card, btn) {
+    var r = document.createRange();
+    r.selectNodeContents(card);
+    var s = getSelection();
+    s.removeAllRanges();
+    s.addRange(r);
+    var orig = btn.textContent;
+    btn.textContent = 'Selected — press ⌘C';
+    btn.style.background = '#0C2BB0';
+    setTimeout(function () { btn.textContent = orig; btn.style.background = ''; }, 3500);
+  }
+
+  // ---- clipboard ----
+  function flash(btn, label) { var t = btn.textContent; btn.textContent = label; setTimeout(function () { btn.textContent = t; }, 1600); }
+  function copyRich(html, btn) {
+    if (navigator.clipboard && window.ClipboardItem) {
+      navigator.clipboard.write([new ClipboardItem({
+        'text/html': new Blob([html], { type: 'text/html' }),
+        'text/plain': new Blob([plain], { type: 'text/plain' })
+      })]).then(function () { flash(btn, 'Copied ✓'); }).catch(function () { fallbackRich(html, btn); });
+    } else { fallbackRich(html, btn); }
+  }
+  function fallbackRich(html, btn) {
+    var d = document.createElement('div'); d.contentEditable = 'true'; d.innerHTML = html;
+    d.style.cssText = 'position:fixed;left:-9999px;top:0;'; document.body.appendChild(d);
+    var r = document.createRange(); r.selectNodeContents(d);
+    var s = getSelection(); s.removeAllRanges(); s.addRange(r);
+    try { document.execCommand('copy'); } catch (e) {}
+    s.removeAllRanges(); document.body.removeChild(d); flash(btn, 'Copied ✓');
+  }
+  function copyText(text, btn) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { flash(btn, 'Copied ✓'); }).catch(function () { fallbackText(text, btn); });
+    } else { fallbackText(text, btn); }
+  }
+  function fallbackText(text, btn) {
+    var t = document.createElement('textarea'); t.value = text;
+    t.style.cssText = 'position:fixed;left:-9999px;top:0;'; document.body.appendChild(t); t.select();
+    try { document.execCommand('copy'); } catch (e) {}
+    document.body.removeChild(t); flash(btn, 'Copied ✓');
+  }
+
+  // ---- render ----
+  var host = document.getElementById('options');
+  OPTIONS.forEach(function (o) {
+    var html = o.build();
+    var sec = document.createElement('section');
+    sec.className = 'opt';
+    sec.innerHTML =
+      '<div class="row"><span class="num">' + o.n + '</span><span class="lbl">' + o.label + '</span><span class="meta">' + o.meta + '</span></div>'
+      + '<div class="card"></div>'
+      + '<div class="btns"><button class="primary rich">Select for Apple Mail</button><button class="ghost src">Copy code</button></div>';
+    sec.querySelector('.card').innerHTML = html;
+    sec.querySelector('.rich').addEventListener('click', function () { selectCard(sec.querySelector('.card'), this); });
+    sec.querySelector('.src').addEventListener('click', function () { copyText(html, this); });
+    host.appendChild(sec);
+  });
+
+  // asset URL fields + copy buttons
+  document.querySelectorAll('.url').forEach(function (el) { el.textContent = asset(el.getAttribute('data-file')); });
+  document.querySelectorAll('.asset .copy').forEach(function (btn) {
+    btn.addEventListener('click', function () { copyText(asset(btn.getAttribute('data-url')), btn); });
+  });
+
+  // hosted status
+  var badge = document.getElementById('hosted');
+  if (isHosted) { badge.className = 'hosted ok'; badge.textContent = 'Live host: ' + BASE + ' — images will load in Gmail'; }
+  else { badge.className = 'hosted no'; badge.textContent = 'Opened locally — deploy this folder to your site, then images load in email'; }
+})();
+</script>
+</body>
+</html>

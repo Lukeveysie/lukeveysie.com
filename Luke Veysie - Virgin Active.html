@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Luke Veysie — Virgin Active</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="site.css?v=6"/>
+<style>
+  /* ── Project detail page (scoped) ─────────────────────────── */
+  .project {
+    padding: 140px 36px 100px;
+    max-width: 1180px;
+    margin: 0 auto;
+  }
+
+  /* Centred header */
+  .project-head {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+  .project-head .eyebrow {
+    font-family: var(--system);
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 22px;
+  }
+  .project-head h1 {
+    font-family: var(--donrich);
+    font-size: clamp(34px, 4.55vw, 73px);
+    line-height: 0.9;
+    letter-spacing: -0.015em;
+    margin: 0;
+  }
+  .project-head h1 .blue { color: var(--blue); }
+
+  /* ── Films — one feature + a two-up row ───────────────────── */
+  .films {
+    display: grid;
+    gap: 20px;
+    margin: 0 auto;
+  }
+  .films .row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .project-player {
+    cursor: pointer;
+    display: block;
+    margin: 0;
+  }
+  .project-player .frame {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #0a0908;
+    overflow: hidden;
+  }
+  @media (max-width: 720px) {
+    .films .row { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 540px) {
+    .project { padding: 104px 18px 76px; }
+    .films { gap: 14px; }
+    .project-body { margin-top: 44px; }
+    .gallery { margin-top: 56px; }
+    .gallery-head { flex-wrap: wrap; gap: 8px 14px; }
+    .gallery-head .label { letter-spacing: 0.16em; }
+    .gallery-track { gap: 12px; }
+    .gallery-slide { height: clamp(320px, 56vh, 520px); }
+  }
+
+  /* Credits + short description block, centred + constrained */
+  .project-body {
+    max-width: 680px;
+    margin: 56px auto 0;
+    text-align: center;
+  }
+  .project-body .credits {
+    font-family: var(--system);
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px 22px;
+    margin-bottom: 26px;
+  }
+  .project-desc {
+    margin: 0 0 22px;
+    font-family: var(--system);
+    font-weight: 400;
+    font-size: clamp(15px, 1.3vw, 18px);
+    line-height: 1.7;
+    letter-spacing: 0;
+    color: var(--soft);
+    text-wrap: pretty;
+  }
+  .project-desc:last-child { margin-bottom: 0; }
+
+  /* ── Swipeable gallery (uniform-height filmstrip) ─────────── */
+  .gallery {
+    margin-top: 80px;
+  }
+  .gallery-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 16px;
+    margin-bottom: 24px;
+  }
+  .gallery-head .label {
+    font-family: var(--system);
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .gallery-head .controls {
+    display: flex;
+    gap: 10px;
+  }
+  .gallery-arrow {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    background: transparent;
+    color: var(--ink);
+    cursor: pointer;
+    transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease, opacity 0.25s ease;
+  }
+  .gallery-arrow:hover {
+    background: var(--blue);
+    border-color: var(--blue);
+    color: var(--paper);
+  }
+  .gallery-arrow:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+  .gallery-arrow:disabled:hover {
+    background: transparent;
+    border-color: var(--line);
+    color: var(--ink);
+  }
+  .gallery-arrow svg {
+    width: 18px; height: 18px;
+    stroke: currentColor; stroke-width: 1.8;
+    stroke-linecap: round; stroke-linejoin: round;
+    fill: none;
+  }
+
+  .gallery-track {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    cursor: grab;
+    padding-bottom: 4px;
+  }
+  .gallery-track::-webkit-scrollbar { display: none; }
+  .gallery-track.dragging {
+    cursor: grabbing;
+    scroll-behavior: auto;
+    scroll-snap-type: none;
+  }
+  /* Uniform height, width follows each photo's aspect — handles the
+     mixed portrait/landscape BTS set as an editorial filmstrip. */
+  .gallery-slide {
+    flex: 0 0 auto;
+    height: clamp(360px, 62vh, 660px);
+    scroll-snap-align: center;
+    background: #0a0908;
+    overflow: hidden;
+  }
+  .gallery-slide img {
+    height: 100%;
+    width: auto;
+    display: block;
+    object-fit: cover;
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+
+  .gallery-dots {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 24px;
+  }
+  .gallery-dots button {
+    width: 7px; height: 7px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(10, 9, 8, 0.2);
+    cursor: pointer;
+    transition: background 0.25s ease, transform 0.25s ease;
+  }
+  .gallery-dots button.on {
+    background: var(--blue);
+    transform: scale(1.25);
+  }
+  @media (prefers-color-scheme: dark) {
+    .gallery-dots button { background: rgba(236, 235, 230, 0.22); }
+  }
+
+  /* ── Close cross → back to main ───────────────────────────── */
+  /* This is a focused detail view, so the primary nav links are
+     replaced by a single close affordance top-right. */
+  .project-page .nav-links { display: none; }
+
+  .proj-close {
+    position: fixed;
+    top: 22px;
+    right: 30px;
+    z-index: 120;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    background: var(--paper);
+    color: var(--ink);
+    cursor: pointer;
+    /* entrance */
+    animation: closeIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.15s both;
+    transition:
+      background 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+      border-color 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+      color 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+      transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1),
+      box-shadow 0.35s ease;
+  }
+  .proj-close svg {
+    width: 20px; height: 20px;
+    stroke: currentColor; stroke-width: 1.7;
+    stroke-linecap: round;
+    fill: none;
+    transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .proj-close:hover {
+    background: var(--blue);
+    border-color: var(--blue);
+    color: var(--paper);
+    transform: scale(1.08);
+    box-shadow: 0 10px 28px rgba(15, 51, 204, 0.28);
+  }
+  .proj-close:hover svg { transform: rotate(90deg); }
+  .proj-close:active { transform: scale(0.94); }
+  .proj-close:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
+
+  @keyframes closeIn {
+    from { opacity: 0; transform: scale(0.6) rotate(-45deg); }
+    to   { opacity: 1; transform: scale(1) rotate(0); }
+  }
+  @media (max-width: 720px) {
+    .proj-close { top: 16px; right: 16px; width: 44px; height: 44px; }
+  }
+
+  /* Smooth exit: page fades + lifts before navigating back */
+  body {
+    opacity: 1;
+    transform: none;
+    transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  body.page-leaving {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .proj-close, .proj-close svg, body { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body data-page="" class="project-page" data-next-href="index.html#work" data-next-label="Direct">
+
+<header data-nav></header>
+<a class="proj-close" href="index.html#work" aria-label="Close — back to work">
+  <svg viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></svg>
+</a>
+
+<main>
+  <section class="project" data-screen-label="Project — Virgin Active">
+
+    <!-- ── Centred header ───────────────────────────────── -->
+    <div class="project-head reveal">
+      <div class="eyebrow">Commercial · 2024</div>
+      <h1>Virgin Active<span class="blue">.</span></h1>
+    </div>
+
+    <!-- ── Films (3) ────────────────────────────────────── -->
+    <div class="films reveal">
+      <article class="project-player work-tile feature" data-screen-label="Film 01" data-vimeo="1201396728" data-poster="https://i.vimeocdn.com/video/2168728938-1025b3e6843d2e900390605c1b565b4ae1f42792029006fcbd3636bc1c812878-d_1280?region=us">
+        <div class="frame"></div>
+      </article>
+      <div class="row">
+        <article class="project-player work-tile feature" data-screen-label="Film 02" data-vimeo="1201396730" data-poster="https://i.vimeocdn.com/video/2168728954-05a3577190ac956bb316957b7ad39b8fd96f11f1ef3ec2e976bfefcdf56695cf-d_1280?region=us">
+          <div class="frame"></div>
+        </article>
+        <article class="project-player work-tile feature" data-screen-label="Film 03" data-vimeo="1201396731" data-poster="https://i.vimeocdn.com/video/2168729325-188bfb904dfa99e3a435fcd1e8eff8c01a2c8a5a4dfba7301b6a8dfdaacb64f1-d_1280?region=us">
+          <div class="frame"></div>
+        </article>
+      </div>
+    </div>
+
+    <!-- ── Credits ───────────────────────────────────────── -->
+    <!-- ── Project statement — meta row ── -->
+    <div class="project-statement-wrap reveal">
+      <div class="project-meta">
+        <div class="m-cell"><span class="m-label">Client</span><span class="m-value">Virgin Active South Africa</span></div>
+        <div class="m-cell"><span class="m-label">Agency</span><span class="m-value">Leagas Delaney</span></div>
+        <div class="m-cell"><span class="m-label">Production</span><span class="m-value">Flattery Films</span></div>
+        <div class="m-cell"><span class="m-label">Role</span><span class="m-value">Editor</span></div>
+      </div>
+    </div>
+
+    <!-- ── Swipeable gallery — behind the scenes ─────────── -->
+    <div class="gallery reveal">
+      <div class="gallery-head">
+        <span class="label" data-prefix="Behind the scenes">Behind the scenes — 01 / 05</span>
+        <div class="controls">
+          <button type="button" class="gallery-arrow" data-dir="-1" aria-label="Previous image">
+            <svg viewBox="0 0 24 24"><path d="M15 5l-8 7 8 7"/></svg>
+          </button>
+          <button type="button" class="gallery-arrow" data-dir="1" aria-label="Next image">
+            <svg viewBox="0 0 24 24"><path d="M9 5l8 7-8 7"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="gallery-track">
+        <div class="gallery-slide"><img src="uploads/Virgin BTS/web/va-5.jpg" alt="Virgin Active — behind the scenes" loading="lazy"/></div>
+        <div class="gallery-slide"><img src="uploads/Virgin BTS/web/va-1.jpg" alt="Virgin Active — behind the scenes" loading="lazy"/></div>
+        <div class="gallery-slide"><img src="uploads/Virgin BTS/web/va-2.jpg" alt="Virgin Active — behind the scenes" loading="lazy"/></div>
+        <div class="gallery-slide"><img src="uploads/Virgin BTS/web/va-3.jpg" alt="Virgin Active — behind the scenes" loading="lazy"/></div>
+        <div class="gallery-slide"><img src="uploads/Virgin BTS/web/va-4.jpg" alt="Virgin Active — behind the scenes" loading="lazy"/></div>
+      </div>
+
+      <div class="gallery-dots"></div>
+    </div>
+
+  </section>
+
+  <footer data-foot></footer>
+</main>
+
+<script src="image-slot.js"></script>
+<script src="site.js?v=5"></script>
+<script src="video-grid.js?v=5"></script>
+<script src="project-template-gallery.js?v=5"></script>
+<script>
+  // Smooth fade-out before returning to the grid (cross-page view
+  // transitions are avoided here as they warn in embedded contexts).
+  (function () {
+    var close = document.querySelector('.proj-close');
+    if (!close) return;
+    close.addEventListener('click', function (e) {
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduce) return; // let the link navigate normally
+      e.preventDefault();
+      var href = close.getAttribute('href');
+      document.body.classList.add('page-leaving');
+      setTimeout(function () { window.location.href = href; }, 380);
+    });
+  })();
+</script>
+</body>
+</html>

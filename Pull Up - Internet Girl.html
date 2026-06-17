@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Luke Veysie — Internet Girl · Pull Up</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="site.css?v=6"/>
+<style>
+  /* ── Project detail page (scoped) ─────────────────────────── */
+  .project {
+    padding: 140px 36px 100px;
+    max-width: 1180px;
+    margin: 0 auto;
+  }
+
+  /* Centred header */
+  .project-head {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+  .project-head .eyebrow {
+    font-family: var(--system);
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 22px;
+  }
+  .project-head h1 {
+    font-family: var(--donrich);
+    font-size: clamp(34px, 4.55vw, 73px);
+    line-height: 0.9;
+    letter-spacing: -0.015em;
+    margin: 0;
+  }
+  .project-head h1 .blue { color: var(--blue); }
+
+  /* ── Films — one feature + a two-up row ───────────────────── */
+  .films {
+    display: grid;
+    gap: 20px;
+    margin: 0 auto;
+  }
+  .films .row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .project-player {
+    cursor: pointer;
+    display: block;
+    margin: 0;
+  }
+  .project-player .frame {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #0a0908;
+    overflow: hidden;
+  }
+  @media (max-width: 720px) {
+    .films .row { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 540px) {
+    .project { padding: 104px 18px 76px; }
+    .films { gap: 14px; }
+    .project-body { margin-top: 44px; }
+    .gallery { margin-top: 56px; }
+    .gallery-track { gap: 12px; }
+    .gallery-slide { height: clamp(320px, 56vh, 520px); }
+  }
+
+  /* Credits + short description block, centred + constrained */
+  .project-body {
+    max-width: 680px;
+    margin: 56px auto 0;
+    text-align: center;
+  }
+  .project-body .credits {
+    font-family: var(--system);
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px 22px;
+    margin-bottom: 26px;
+  }
+  .project-desc {
+    margin: 0 0 22px;
+    font-family: var(--system);
+    font-weight: 400;
+    font-size: clamp(15px, 1.3vw, 18px);
+    line-height: 1.7;
+    letter-spacing: 0;
+    color: var(--soft);
+    text-wrap: pretty;
+  }
+  .project-desc:last-child { margin-bottom: 0; }
+
+  /* ── Swipeable gallery (uniform-height filmstrip) ─────────── */
+  .gallery {
+    margin-top: 80px;
+  }
+  .gallery-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 16px;
+    margin-bottom: 24px;
+  }
+  .gallery-head .label {
+    font-family: var(--system);
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .gallery-head .controls {
+    display: flex;
+    gap: 10px;
+  }
+  .gallery-arrow {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    background: transparent;
+    color: var(--ink);
+    cursor: pointer;
+    transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease, opacity 0.25s ease;
+  }
+  .gallery-arrow:hover {
+    background: var(--blue);
+    border-color: var(--blue);
+    color: var(--paper);
+  }
+  .gallery-arrow:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+  .gallery-arrow:disabled:hover {
+    background: transparent;
+    border-color: var(--line);
+    color: var(--ink);
+  }
+  .gallery-arrow svg {
+    width: 18px; height: 18px;
+    stroke: currentColor; stroke-width: 1.8;
+    stroke-linecap: round; stroke-linejoin: round;
+    fill: none;
+  }
+
+  .gallery-track {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    cursor: grab;
+    padding-bottom: 4px;
+  }
+  .gallery-track::-webkit-scrollbar { display: none; }
+  .gallery-track.dragging {
+    cursor: grabbing;
+    scroll-behavior: auto;
+    scroll-snap-type: none;
+  }
+  /* Uniform height, width follows each photo's aspect — handles the
+     mixed portrait/landscape BTS set as an editorial filmstrip. */
+  .gallery-slide {
+    flex: 0 0 auto;
+    height: clamp(360px, 62vh, 660px);
+    scroll-snap-align: center;
+    background: #0a0908;
+    overflow: hidden;
+  }
+  .gallery-slide img {
+    height: 100%;
+    width: auto;
+    display: block;
+    object-fit: cover;
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+
+  .gallery-dots {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 24px;
+  }
+  .gallery-dots button {
+    width: 7px; height: 7px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(10, 9, 8, 0.2);
+    cursor: pointer;
+    transition: background 0.25s ease, transform 0.25s ease;
+  }
+  .gallery-dots button.on {
+    background: var(--blue);
+    transform: scale(1.25);
+  }
+  @media (prefers-color-scheme: dark) {
+    .gallery-dots button { background: rgba(236, 235, 230, 0.22); }
+  }
+
+  /* ── VFX technique grid (3×3 of GIFs) ─────────────────── */
+  .vfx-wrap { margin-top: 44px; }
+  /* Full-bleed: push the grid edge-to-edge so 3-across frames read as big as possible */
+  .vfx {
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    transform: none;
+  }
+  .vfx-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 16px;
+    margin-bottom: 24px;
+  }
+  .vfx-head .label {
+    font-family: var(--system);
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .vfx-head .hint {
+    font-family: var(--system);
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+  }
+  .vfx-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2px;
+  }
+  .vfx-cell {
+    position: relative;
+    aspect-ratio: 800 / 562;
+    overflow: hidden;
+    background: #0a0908;
+  }
+  .vfx-cell img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  /* number + technique caption, bottom-left */
+  .vfx-cell .tag {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    z-index: 2;
+    display: flex;
+    align-items: baseline;
+    gap: 9px;
+    padding: 26px 12px 11px;
+    font-family: var(--system);
+    background: linear-gradient(180deg, rgba(10,9,8,0) 0%, rgba(10,9,8,0.72) 100%);
+    pointer-events: none;
+  }
+  .vfx-cell .tag .n {
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: var(--blue-soft);
+    font-variant-numeric: tabular-nums;
+  }
+  .vfx-cell .tag .name {
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #F7F7F7;
+    line-height: 1.2;
+  }
+  @media (max-width: 560px) {
+    .vfx-grid { grid-template-columns: 1fr; gap: 2px; }
+    .vfx-wrap { margin-top: 36px; }
+  }
+
+  /* ── Close cross → back to main ───────────────────────────── */
+  /* This is a focused detail view, so the primary nav links are
+     replaced by a single close affordance top-right. */
+  .project-page .nav-links { display: none; }
+
+  .proj-close {
+    position: fixed;
+    top: 22px;
+    right: 30px;
+    z-index: 120;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    background: var(--paper);
+    color: var(--ink);
+    cursor: pointer;
+    /* entrance */
+    animation: closeIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.15s both;
+    transition:
+      background 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+      border-color 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+      color 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+      transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1),
+      box-shadow 0.35s ease;
+  }
+  .proj-close svg {
+    width: 20px; height: 20px;
+    stroke: currentColor; stroke-width: 1.7;
+    stroke-linecap: round;
+    fill: none;
+    transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .proj-close:hover {
+    background: var(--blue);
+    border-color: var(--blue);
+    color: var(--paper);
+    transform: scale(1.08);
+    box-shadow: 0 10px 28px rgba(15, 51, 204, 0.28);
+  }
+  .proj-close:hover svg { transform: rotate(90deg); }
+  .proj-close:active { transform: scale(0.94); }
+  .proj-close:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
+
+  @keyframes closeIn {
+    from { opacity: 0; transform: scale(0.6) rotate(-45deg); }
+    to   { opacity: 1; transform: scale(1) rotate(0); }
+  }
+  @media (max-width: 720px) {
+    .proj-close { top: 16px; right: 16px; width: 44px; height: 44px; }
+  }
+
+  /* Smooth exit: page fades + lifts before navigating back */
+  body {
+    opacity: 1;
+    transform: none;
+    overflow-x: clip;
+    transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  body.page-leaving {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .proj-close, .proj-close svg, body { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body data-page="" class="project-page" data-next-href="edit.html" data-next-label="Edit">
+
+<header data-nav></header>
+<a class="proj-close" href="edit.html" aria-label="Close — back to Edit">
+  <svg viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></svg>
+</a>
+
+<main>
+  <section class="project" data-screen-label="Project — Pull Up · Internet Girl">
+
+    <!-- ── Centred header ───────────────────────────────── -->
+    <div class="project-head reveal">
+      <div class="eyebrow">VFX / Composite</div>
+      <h1>Internet Girl — Pull Up<span class="blue">.</span></h1>
+    </div>
+
+    <!-- ── Lead film ────────────────────────────────────── -->
+    <div class="films reveal">
+      <article class="project-player work-tile feature" data-screen-label="Lead film" data-vimeo="1015601492" data-poster="https://i.vimeocdn.com/video/1933678300-be6c4d5bd721b5868b81be034766e64855587f7256d24921eba4d6ee2dc2eb17-d_1280?region=us">
+        <div class="frame"></div>
+      </article>
+    </div>
+
+    <!-- ── Credits + note ────────────────────────────────── -->
+    <!-- ── VFX technique grid ────────────────────────────── -->
+    <div class="vfx-wrap reveal">
+      <div class="vfx">
+      <div class="vfx-head">
+        <span class="label">Techniques</span>
+        <span class="hint">Selected frames · composite breakdown</span>
+      </div>
+      <div class="vfx-grid">
+        <figure class="vfx-cell"><img src="uploads/ezgif-14e5a0c4c7e80011.gif" alt="Slitscan" loading="lazy" decoding="async"/><figcaption class="tag"><span class="n">01</span><span class="name">Slitscan</span></figcaption></figure>
+        <figure class="vfx-cell"><img src="uploads/ezgif-1743f7bb00559b1d.gif" alt="Money duplication" loading="lazy" decoding="async"/><figcaption class="tag"><span class="n">02</span><span class="name">Money Duplication</span></figcaption></figure>
+        <figure class="vfx-cell"><img src="uploads/ezgif-1ad1e0eb15ffa7d1.gif" alt="Slitscan + crazy cut by Royd" loading="lazy" decoding="async"/><figcaption class="tag"><span class="n">03</span><span class="name">Slitscan + Crazy Cut by Royd</span></figcaption></figure>
+        <figure class="vfx-cell"><img src="uploads/ezgif-12bd073b93b0081a.gif" alt="Invisible cut" loading="lazy" decoding="async"/><figcaption class="tag"><span class="n">04</span><span class="name">Invisible Cut</span></figcaption></figure>
+        <figure class="vfx-cell"><img src="uploads/ezgif-14a7ba81b328d081.gif" alt="Mirror duplication composite" loading="lazy" decoding="async"/><figcaption class="tag"><span class="n">05</span><span class="name">Mirror Duplication Composite</span></figcaption></figure>
+        <figure class="vfx-cell"><img src="uploads/ezgif-166939a7b557d85f.gif" alt="Set extension" loading="lazy" decoding="async"/><figcaption class="tag"><span class="n">06</span><span class="name">Set Extension</span></figcaption></figure>
+        <figure class="vfx-cell"><img src="uploads/ezgif-145b1e702dbc2d9a.gif" alt="Cloning" loading="lazy" decoding="async"/><figcaption class="tag"><span class="n">07</span><span class="name">Cloning</span></figcaption></figure>
+        <figure class="vfx-cell"><img src="uploads/ezgif-12442fb366bd7428.gif" alt="Slitscan" loading="lazy" decoding="async"/><figcaption class="tag"><span class="n">08</span><span class="name">Slitscan</span></figcaption></figure>
+        <figure class="vfx-cell"><img src="uploads/ezgif-13918d87271b7228.gif" alt="Slitscan" loading="lazy" decoding="async"/><figcaption class="tag"><span class="name">Slitscan</span></figcaption></figure>
+      </div>
+      </div>
+    </div>
+
+    <!-- ── Credits + note ──────────────────────────── -->
+    <!-- ── Project statement — meta row + headline/body ── -->
+    <div class="project-statement-wrap reveal">
+      <div class="project-meta">
+        <div class="m-cell"><span class="m-label">Role</span><span class="m-value">VFX / Composite</span></div>
+        <div class="m-cell"><span class="m-label">Director</span><span class="m-value">Royd Ringdahl</span></div>
+        <div class="m-cell"><span class="m-label">Production</span><span class="m-value">Palm Prod</span></div>
+        <div class="m-cell"><span class="m-label">Lead VFX</span><span class="m-value"><a href="https://instagram.com/lumeoedits" target="_blank" rel="noopener">lumeoedits</a></span></div>
+      </div>
+      <div class="project-statement">
+        <h2 class="ps-headline">VFX and composite frames from a video that became a cultural moment<span class="blue">.</span></h2>
+        <div class="ps-body">
+          <p>
+            VFX / composite work for Pull Up — Internet Girl. With this video building to the
+            cultural moment it’s become, I didn’t want to miss the opportunity to share some of
+            the frames that I worked on.
+          </p>
+          <p>
+            Big flowers to <a href="https://instagram.com/roydr_" target="_blank" rel="noopener">@roydr_</a>
+            for dreaming up and directing this masterpiece and for always reaching a little further.
+            Had a very chaotic and productive few days in a small room. Shout out to the crew that
+            pulled shifts to make it happen.
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <footer data-foot></footer>
+</main>
+
+<script src="image-slot.js"></script>
+<script src="site.js?v=5"></script>
+<script src="video-grid.js?v=5"></script>
+<script>
+  // Smooth fade-out before returning to the grid (cross-page view
+  // transitions are avoided here as they warn in embedded contexts).
+  (function () {
+    var close = document.querySelector('.proj-close');
+    if (!close) return;
+    close.addEventListener('click', function (e) {
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduce) return; // let the link navigate normally
+      e.preventDefault();
+      var href = close.getAttribute('href');
+      document.body.classList.add('page-leaving');
+      setTimeout(function () { window.location.href = href; }, 380);
+    });
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Luke Veysie — Project</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="site.css"/>
+<style>
+  /* ── Project detail page (scoped) ─────────────────────────── */
+  .project {
+    padding: 140px 36px 100px;
+    max-width: 1180px;
+    margin: 0 auto;
+  }
+
+  /* Centred header */
+  .project-head {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+  .project-head .eyebrow {
+    font-family: var(--system);
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 22px;
+  }
+  .project-head h1 {
+    font-family: var(--donrich);
+    font-size: clamp(48px, 6.5vw, 104px);
+    line-height: 0.9;
+    letter-spacing: -0.015em;
+    margin: 0;
+  }
+  .project-head h1 .blue { color: var(--blue); }
+
+  /* Large player — reuses the facade reel-viewer via .work-tile */
+  .project-player {
+    cursor: pointer;
+    display: block;
+    margin: 0 auto;
+  }
+  .project-player .frame {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #0a0908;
+    overflow: hidden;
+  }
+
+  /* Credits + short description block, centred + constrained */
+  .project-body {
+    max-width: 680px;
+    margin: 56px auto 0;
+    text-align: center;
+  }
+  .project-body .credits {
+    font-family: var(--system);
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px 22px;
+    margin-bottom: 26px;
+  }
+  .project-desc {
+    margin: 0;
+    font-family: var(--system);
+    font-weight: 400;
+    font-size: clamp(15px, 1.3vw, 18px);
+    line-height: 1.7;
+    letter-spacing: 0;
+    color: var(--soft);
+    text-wrap: pretty;
+  }
+
+  /* ── Swipeable gallery (4 images) ─────────────────────────── */
+  .gallery {
+    margin-top: 80px;
+  }
+  .gallery-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 16px;
+    margin-bottom: 24px;
+  }
+  .gallery-head .label {
+    font-family: var(--system);
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .gallery-head .controls {
+    display: flex;
+    gap: 10px;
+  }
+  .gallery-arrow {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    background: transparent;
+    color: var(--ink);
+    cursor: pointer;
+    transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease, opacity 0.25s ease;
+  }
+  .gallery-arrow:hover {
+    background: var(--blue);
+    border-color: var(--blue);
+    color: var(--paper);
+  }
+  .gallery-arrow:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+  .gallery-arrow:disabled:hover {
+    background: transparent;
+    border-color: var(--line);
+    color: var(--ink);
+  }
+  .gallery-arrow svg {
+    width: 18px; height: 18px;
+    stroke: currentColor; stroke-width: 1.8;
+    stroke-linecap: round; stroke-linejoin: round;
+    fill: none;
+  }
+
+  .gallery-track {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    cursor: grab;
+    padding-bottom: 4px;
+  }
+  .gallery-track::-webkit-scrollbar { display: none; }
+  .gallery-track.dragging {
+    cursor: grabbing;
+    scroll-behavior: auto;
+    scroll-snap-type: none;
+  }
+  .gallery-slide {
+    flex: 0 0 72%;
+    scroll-snap-align: center;
+    aspect-ratio: 16 / 10;
+    background: #e7e3da;
+  }
+  .gallery-slide image-slot {
+    width: 100%;
+    height: 100%;
+  }
+  @media (max-width: 720px) {
+    .gallery-slide { flex-basis: 88%; }
+  }
+
+  .gallery-dots {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 24px;
+  }
+  .gallery-dots button {
+    width: 7px; height: 7px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(10, 9, 8, 0.2);
+    cursor: pointer;
+    transition: background 0.25s ease, transform 0.25s ease;
+  }
+  .gallery-dots button.on {
+    background: var(--blue);
+    transform: scale(1.25);
+  }
+</style>
+</head>
+<body data-page="">
+
+<header data-nav></header>
+
+<main>
+  <section class="project" data-screen-label="Project">
+
+    <!-- ── Centred header ───────────────────────────────── -->
+    <div class="project-head reveal">
+      <div class="eyebrow">Selected work · 2026</div>
+      <h1>Project Title<span class="blue">.</span></h1>
+    </div>
+
+    <!-- ── Large player (swap data-vimeo / data-yt) ─────── -->
+    <article class="project-player work-tile feature reveal" data-screen-label="Player" data-vimeo="999075549">
+      <div class="frame"></div>
+    </article>
+
+    <!-- ── Credits + short description ───────────────────── -->
+    <div class="project-body reveal">
+      <div class="credits">
+        <span>Director / Editor</span>
+        <span>Client — Brand</span>
+        <span>Cape Town</span>
+      </div>
+      <p class="project-desc">
+        A short paragraph about the project — the brief, the idea, and the craft
+        behind it. Keep it to two or three sentences that frame the work before
+        the gallery below.
+      </p>
+    </div>
+
+    <!-- ── Swipeable gallery (4 images) ─────────────────── -->
+    <div class="gallery reveal">
+      <div class="gallery-head">
+        <span class="label">Stills — 01 / 04</span>
+        <div class="controls">
+          <button type="button" class="gallery-arrow" data-dir="-1" aria-label="Previous image">
+            <svg viewBox="0 0 24 24"><path d="M15 5l-8 7 8 7"/></svg>
+          </button>
+          <button type="button" class="gallery-arrow" data-dir="1" aria-label="Next image">
+            <svg viewBox="0 0 24 24"><path d="M9 5l8 7-8 7"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="gallery-track">
+        <div class="gallery-slide"><image-slot id="proj-still-1" placeholder="Drop still 01"></image-slot></div>
+        <div class="gallery-slide"><image-slot id="proj-still-2" placeholder="Drop still 02"></image-slot></div>
+        <div class="gallery-slide"><image-slot id="proj-still-3" placeholder="Drop still 03"></image-slot></div>
+        <div class="gallery-slide"><image-slot id="proj-still-4" placeholder="Drop still 04"></image-slot></div>
+      </div>
+
+      <div class="gallery-dots"></div>
+    </div>
+
+  </section>
+
+  <footer data-foot></footer>
+</main>
+
+<script src="image-slot.js"></script>
+<script src="site.js"></script>
+<script src="video-grid.js"></script>
+<script src="project-template-gallery.js"></script>
+</body>
+</html>

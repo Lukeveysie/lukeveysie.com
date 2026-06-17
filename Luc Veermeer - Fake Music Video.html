@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Luke Veysie — Luc Veermeer · Fake Music Video</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="site.css?v=6"/>
+<style>
+  /* ── Project detail page (scoped) ─────────────────────────── */
+  .project {
+    padding: 140px 36px 100px;
+    max-width: 1180px;
+    margin: 0 auto;
+  }
+
+  /* Centred header */
+  .project-head {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+  .project-head .eyebrow {
+    font-family: var(--system);
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 22px;
+  }
+  .project-head h1 {
+    font-family: var(--donrich);
+    font-size: clamp(34px, 4.55vw, 73px);
+    line-height: 0.9;
+    letter-spacing: -0.015em;
+    margin: 0;
+  }
+  .project-head h1 .blue { color: var(--blue); }
+
+  /* ── Films ────────────────────────────────────────────────── */
+  .films {
+    display: grid;
+    gap: 20px;
+    margin: 0 auto;
+  }
+  .project-player {
+    cursor: pointer;
+    display: block;
+    margin: 0;
+  }
+  .project-player .frame {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #0a0908;
+    overflow: hidden;
+  }
+
+  /* A second film placed below the gallery */
+  .films.post-gallery {
+    margin-top: 0;
+  }
+
+  /* Credits + paragraph block under the main film */
+  .project-body {
+    max-width: 720px;
+    margin: 52px auto 0;
+    text-align: center;
+  }
+  .project-body .credits {
+    font-family: var(--system);
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 30px;
+  }
+  .project-body .credits .role { color: var(--ink); }
+  .project-desc {
+    margin: 0 0 18px;
+    font-family: var(--system);
+    font-weight: 400;
+    font-size: clamp(15px, 1.25vw, 18px);
+    line-height: 1.7;
+    color: var(--soft);
+    text-wrap: pretty;
+  }
+  .project-desc:last-child { margin-bottom: 0; }
+  .project-desc a {
+    color: var(--blue);
+    transition: opacity 0.2s ease;
+  }
+  .project-desc a:hover { opacity: 0.7; }
+
+  /* “Watch behind the scenes” title above the bottom film */
+  .bts-title {
+    text-align: center;
+    margin: 84px 0 26px;
+  }
+  .bts-title .t {
+    font-family: var(--donrich);
+    font-size: clamp(28px, 3.6vw, 48px);
+    line-height: 1;
+    letter-spacing: 0.005em;
+    text-transform: uppercase;
+    margin: 0;
+  }
+  .bts-title .t .blue { color: var(--blue); }
+
+  /* ── Swipeable gallery (uniform-height filmstrip) ─────────── */
+  .gallery {
+    margin-top: 80px;
+  }
+  .gallery-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 16px;
+    margin-bottom: 24px;
+  }
+  .gallery-head .label {
+    font-family: var(--system);
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .gallery-head .controls {
+    display: flex;
+    gap: 10px;
+  }
+  .gallery-arrow {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    background: transparent;
+    color: var(--ink);
+    cursor: pointer;
+    transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease, opacity 0.25s ease;
+  }
+  .gallery-arrow:hover {
+    background: var(--blue);
+    border-color: var(--blue);
+    color: var(--paper);
+  }
+  .gallery-arrow:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+  .gallery-arrow:disabled:hover {
+    background: transparent;
+    border-color: var(--line);
+    color: var(--ink);
+  }
+  .gallery-arrow svg {
+    width: 18px; height: 18px;
+    stroke: currentColor; stroke-width: 1.8;
+    stroke-linecap: round; stroke-linejoin: round;
+    fill: none;
+  }
+
+  .gallery-track {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    cursor: grab;
+    padding-bottom: 4px;
+  }
+  .gallery-track::-webkit-scrollbar { display: none; }
+  .gallery-track.dragging {
+    cursor: grabbing;
+    scroll-behavior: auto;
+    scroll-snap-type: none;
+  }
+  /* Uniform height, width follows each photo's aspect — handles the
+     mixed portrait/landscape BTS set as an editorial filmstrip. */
+  .gallery-slide {
+    flex: 0 0 auto;
+    height: clamp(360px, 62vh, 660px);
+    scroll-snap-align: center;
+    background: #0a0908;
+    overflow: hidden;
+  }
+  .gallery-slide img {
+    height: 100%;
+    width: auto;
+    display: block;
+    object-fit: cover;
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+
+  .gallery-dots {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 24px;
+  }
+  .gallery-dots button {
+    width: 7px; height: 7px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(10, 9, 8, 0.2);
+    cursor: pointer;
+    transition: background 0.25s ease, transform 0.25s ease;
+  }
+  .gallery-dots button.on {
+    background: var(--blue);
+    transform: scale(1.25);
+  }
+  @media (prefers-color-scheme: dark) {
+    .gallery-dots button { background: rgba(236, 235, 230, 0.22); }
+  }
+
+  @media (max-width: 540px) {
+    .project { padding: 104px 18px 76px; }
+    .films { gap: 14px; }
+    .films.post-gallery { margin-top: 0; }
+    .project-body { margin-top: 40px; }
+    .bts-title { margin: 60px 0 20px; }
+    .gallery { margin-top: 56px; }
+    .gallery-head { flex-wrap: wrap; gap: 8px 14px; }
+    .gallery-head .label { letter-spacing: 0.16em; }
+    .gallery-track { gap: 12px; }
+    .gallery-slide { height: clamp(320px, 56vh, 520px); }
+  }
+
+  /* ── Close cross → back to main ───────────────────────────── */
+  .project-page .nav-links { display: none; }
+
+  .proj-close {
+    position: fixed;
+    top: 22px;
+    right: 30px;
+    z-index: 120;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    background: var(--paper);
+    color: var(--ink);
+    cursor: pointer;
+    animation: closeIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.15s both;
+    transition:
+      background 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+      border-color 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+      color 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+      transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1),
+      box-shadow 0.35s ease;
+  }
+  .proj-close svg {
+    width: 20px; height: 20px;
+    stroke: currentColor; stroke-width: 1.7;
+    stroke-linecap: round;
+    fill: none;
+    transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .proj-close:hover {
+    background: var(--blue);
+    border-color: var(--blue);
+    color: var(--paper);
+    transform: scale(1.08);
+    box-shadow: 0 10px 28px rgba(15, 51, 204, 0.28);
+  }
+  .proj-close:hover svg { transform: rotate(90deg); }
+  .proj-close:active { transform: scale(0.94); }
+  .proj-close:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
+
+  @keyframes closeIn {
+    from { opacity: 0; transform: scale(0.6) rotate(-45deg); }
+    to   { opacity: 1; transform: scale(1) rotate(0); }
+  }
+  @media (max-width: 720px) {
+    .proj-close { top: 16px; right: 16px; width: 44px; height: 44px; }
+  }
+
+  /* Smooth exit: page fades + lifts before navigating back */
+  body {
+    opacity: 1;
+    transform: none;
+    transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  body.page-leaving {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .proj-close, .proj-close svg, body { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body data-page="" class="project-page" data-next-href="index.html#work" data-next-label="Direct">
+
+<header data-nav></header>
+<a class="proj-close" href="index.html#work" aria-label="Close — back to work">
+  <svg viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></svg>
+</a>
+
+<main>
+  <section class="project" data-screen-label="Project — Luc Veermeer · Fake Music Video">
+
+    <!-- ── Centred header ───────────────────────────────── -->
+    <div class="project-head reveal">
+      <div class="eyebrow">MUSIC VIDEO</div>
+      <h1>Luc Veermeer - FAKE<span class="blue">.</span></h1>
+    </div>
+
+    <!-- ── Main film ────────────────────────────────────── -->
+    <div class="films reveal">
+      <article class="project-player work-tile feature" data-screen-label="Main film" data-vimeo="1198906707" data-poster="https://i.vimeocdn.com/video/2166123653-c74772bcdb4570958f0903c5bbbf834f219fd446e2a8c54049ed024cd575ecf2-d_1280?region=us">
+        <div class="frame"></div>
+      </article>
+    </div>
+
+    <!-- ── Credits + note ────────────────────────────────── -->
+    <!-- ── Project statement — meta row + headline/body ── -->
+    <div class="project-statement-wrap reveal">
+      <div class="project-meta">
+        <div class="m-cell"><span class="m-label">Client</span><span class="m-value">Luc Veermeer</span></div>
+        <div class="m-cell"><span class="m-label">Production</span><span class="m-value">GO West Productions</span></div>
+        <div class="m-cell"><span class="m-label">Label</span><span class="m-value">All My Thoughts</span></div>
+        <div class="m-cell"><span class="m-label">DOP</span><span class="m-value">Robin Shepherd-Taylor</span></div>
+      </div>
+      <div class="project-statement">
+        <h2 class="ps-headline">An insane track, an awesome crew, and a passion project squeezed into the middle of season<span class="blue">.</span></h2>
+        <div class="ps-body">
+          <p>
+            Beautiful work by <a href="https://instagram.com/robinshepherdtaylor" target="_blank" rel="noopener">@robinshepherdtaylor</a>
+            who always kept pushing me to look for more in each shot. A pleasure to work with. A big thank you for all you brought to it.
+          </p>
+          <p>
+            It’s not every day that you get an insane track, and an awesome crew that’s down to jump on a passion project in the middle of season.
+          </p>
+          <p>
+            Maybe it’s because it’s the year of the horse but luck was definitely on our side. Every idea and problem met an unexpected and incredible solution. Really big shout out to <a href="https://instagram.com/westley.filmmaker" target="_blank" rel="noopener">@westley.filmmaker</a> and <a href="https://instagram.com/gowest.productions" target="_blank" rel="noopener">@gowest.productions</a> who pulled all the strings to make this idea happen.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Swipeable gallery — behind the scenes ─────────── -->
+    <div class="gallery reveal">
+      <div class="gallery-head">
+        <span class="label" data-prefix="Behind the scenes">Behind the scenes — 01 / 13</span>
+        <div class="controls">
+          <button type="button" class="gallery-arrow" data-dir="-1" aria-label="Previous image">
+            <svg viewBox="0 0 24 24"><path d="M15 5l-8 7 8 7"/></svg>
+          </button>
+          <button type="button" class="gallery-arrow" data-dir="1" aria-label="Next image">
+            <svg viewBox="0 0 24 24"><path d="M9 5l8 7-8 7"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="gallery-track">
+        <div class="gallery-slide"><img src="uploads/Luc BTS/web/3-_DSF3534.jpg" alt="Luc Veermeer — behind the scenes" loading="lazy"/></div>
+        <div class="gallery-slide"><img src="uploads/Luc BTS/web/000009.jpg" alt="Luc Veermeer — behind the scenes" loading="lazy"/></div>
+        <div class="gallery-slide"><img src="uploads/Luc BTS/web/13-_DSF3477.jpg" alt="Luc Veermeer — behind the scenes" loading="lazy"/></div>
+        <div class="gallery-slide"><img src="uploads/Luc BTS/web/28-_DSF3405.jpg" alt="Luc Veermeer — behind the scenes" loading="lazy"/></div>
+        <div class="gallery-slide"><img src="uploads/Luc BTS/web/31-_DSF3399.jpg" alt="Luc Veermeer — behind the scenes" loading="lazy"/></div>
+        <div class="gallery-slide"><img src="uploads/Luc BTS/web/35-_DSF3392.jpg" alt="Luc Veermeer — behind the scenes" loading="lazy"/></div>
+        <div class="gallery-slide"><img src="uploads/Luc BTS/web/36-_DSF3391.jpg" alt="Luc Veermeer — behind the scenes" loading="lazy"/></div>
+        <div class="gallery-slide"><img src="uploads/Luc BTS/web/38-_DSF3389.jpg" alt="Luc Veermeer — behind the scenes" loading="lazy"/></div>
+        <div class="gallery-slide"><img src="uploads/Luc BTS/web/46-_DSF3374.jpg" alt="Luc Veermeer — behind the scenes" loading="lazy"/></div>
+        <div class="gallery-slide"><img src="uploads/Luc BTS/web/49-_DSF3370.jpg" alt="Luc Veermeer — behind the scenes" loading="lazy"/></div>
+        <div class="gallery-slide"><img src="uploads/Luc BTS/web/50-_DSF3369.jpg" alt="Luc Veermeer — behind the scenes" loading="lazy"/></div>
+        <div class="gallery-slide"><img src="uploads/Luc BTS/web/58-_DSF3347.jpg" alt="Luc Veermeer — behind the scenes" loading="lazy"/></div>
+        <div class="gallery-slide"><img src="uploads/Luc BTS/web/69-_DSF3324.jpg" alt="Luc Veermeer — behind the scenes" loading="lazy"/></div>
+      </div>
+
+      <div class="gallery-dots"></div>
+    </div>
+
+    <!-- ── Watch behind the scenes ───────────────────────── -->
+    <div class="bts-title reveal">
+      <h2 class="t">Watch Behind the Scenes<span class="blue">.</span></h2>
+    </div>
+
+    <!-- ── Second film (below the carousel) ──────────────── -->
+    <div class="films post-gallery reveal">
+      <article class="project-player work-tile feature" data-screen-label="Second film" data-vimeo="1201396003" data-poster="https://i.vimeocdn.com/video/2168739190-2b2d62431b7994dad39dcbdc79f064b97f92e8f0a152698caae135af48fb9cc7-d_1280?region=us">
+        <div class="frame"></div>
+      </article>
+    </div>
+
+  </section>
+
+  <footer data-foot></footer>
+</main>
+
+<script src="image-slot.js"></script>
+<script src="site.js?v=5"></script>
+<script src="video-grid.js?v=5"></script>
+<script src="project-template-gallery.js"></script>
+<script>
+  // Smooth fade-out before returning to the grid.
+  (function () {
+    var close = document.querySelector('.proj-close');
+    if (!close) return;
+    close.addEventListener('click', function (e) {
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduce) return;
+      e.preventDefault();
+      var href = close.getAttribute('href');
+      document.body.classList.add('page-leaving');
+      setTimeout(function () { window.location.href = href; }, 380);
+    });
+  })();
+</script>
+</body>
+</html>
