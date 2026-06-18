@@ -779,6 +779,97 @@ html.fine .work-tile .video-poster { cursor: none; }
 }
 
 /* ──────────────────────────────────────────────────────────
+   Instagram feed (About page)
+   ────────────────────────────────────────────────────────── */
+.ig-section {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 var(--pad) 96px;
+}
+.ig-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 24px;
+  border-top: 1px solid var(--line);
+  padding-top: 40px;
+  margin-bottom: 28px;
+}
+.ig-head .eyebrow { color: var(--muted); margin-bottom: 14px; }
+.ig-title {
+  font-family: var(--donrich);
+  font-weight: 400;
+  font-size: clamp(34px, 4.5vw, 64px);
+  line-height: 0.98;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+.ig-title .blue { color: var(--blue); }
+.ig-follow {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--system);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink);
+  padding-bottom: 6px;
+}
+.ig-follow .ig-glyph {
+  width: 18px; height: 18px;
+  fill: none; stroke: currentColor; stroke-width: 1.7;
+}
+.ig-follow .ig-glyph .ig-dot { fill: currentColor; stroke: none; }
+.ig-follow:hover { color: var(--blue); }
+
+/* Behold widget grid tuning */
+.ig-feed behold-widget {
+  --behold-gap: 14px;
+  --behold-border-radius: 0px;
+  display: block;
+}
+
+/* Follow-CTA fallback (shown until a feed id is connected) */
+.ig-feed--cta { display: block; }
+.ig-cta {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  padding: clamp(28px, 5vw, 52px) clamp(24px, 4vw, 48px);
+  border: 1px solid var(--line);
+  background: var(--ink);
+  color: var(--paper);
+  transition: background 0.35s ease;
+}
+.ig-cta .ig-glyph {
+  flex: 0 0 auto;
+  width: clamp(34px, 5vw, 48px);
+  height: clamp(34px, 5vw, 48px);
+  fill: none; stroke: currentColor; stroke-width: 1.5;
+}
+.ig-cta .ig-glyph .ig-dot { fill: currentColor; stroke: none; }
+.ig-cta-text {
+  font-family: var(--donrich);
+  font-size: clamp(20px, 2.6vw, 34px);
+  line-height: 1.15;
+  font-weight: 400;
+}
+.ig-cta-text b { font-weight: 400; color: var(--blue-soft); }
+.ig-cta-arrow {
+  margin-left: auto;
+  font-family: var(--donrich);
+  font-size: clamp(26px, 3.4vw, 44px);
+  line-height: 1;
+  transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.ig-cta:hover { background: var(--blue); }
+.ig-cta:hover .ig-cta-arrow { transform: translateX(0.18em); }
+.ig-cta:hover .ig-cta-text b { color: var(--paper); }
+
+/* ──────────────────────────────────────────────────────────
    Footer: next-page CTA + bottom bar
    ────────────────────────────────────────────────────────── */
 .foot { display: block; }
@@ -828,6 +919,22 @@ html.fine .work-tile .video-poster { cursor: none; }
 .foot-bar .right { text-align: right; }
 .foot-bar a:hover { color: var(--ink); }
 .foot-bar .sep { margin: 0 10px; }
+.foot-bar .ig-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  vertical-align: middle;
+}
+.foot-bar .ig-glyph {
+  width: 15px;
+  height: 15px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  transition: stroke 0.35s ease;
+}
+.foot-bar .ig-glyph .ig-dot { fill: currentColor; stroke: none; }
+.foot-bar .ig-link:hover .ig-glyph { stroke: var(--ink); }
 
 /* ──────────────────────────────────────────────────────────
    Custom cursor
@@ -1059,6 +1166,11 @@ html.lb-locked body { overflow: hidden; }
   .about { padding: 96px var(--pad) 48px; }
   .about-hero { gap: 32px; padding-bottom: 48px; }
   .about-copy h1 { font-size: 40px; }
+
+  .ig-section { padding-bottom: 56px; }
+  .ig-head { flex-direction: column; align-items: flex-start; gap: 18px; padding-top: 32px; }
+  .ig-cta { flex-wrap: wrap; gap: 16px; }
+  .ig-cta-arrow { margin-left: 0; }
 
   .contact { padding: 72px var(--pad) 64px; }
   .contact h1 { font-size: 46px; margin-bottom: 36px; }
