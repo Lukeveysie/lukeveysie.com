@@ -2,6 +2,9 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "cleanUrls": false,
   "trailingSlash": false,
+  "redirects": [
+    { "source": "/email", "destination": "/email/", "permanent": true }
+  ],
   "headers": [
     {
       "source": "/(.*)",
